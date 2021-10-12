@@ -7,10 +7,9 @@ router.post("/",productService.createAProduct)
 
 //read all
 router.get("/",productService.getProducts)
+router.get("/allCategories", productService.getAllCategories);
 
-//read all best sellers
-router.get("/",productService.getBestSellerProducts)
-
+router.get("/allCategories", productService.getAllCategories);
 //read one product
 
 router.get("/:id",productService.getAProduct)
@@ -22,6 +21,5 @@ router.put("/:id",productService.updateAProduct)
 
 router.delete("/:id",productService.deleteAProduct)
 
-router.get("/category", productService.getAllCategories);
 
 module.exports = router

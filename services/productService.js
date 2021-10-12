@@ -44,27 +44,6 @@ exports.getProducts =(req,res)=>{
     })
 };
 
-//best seller
-exports.getBestSellerProducts =(req,res)=>{
-
-
-    productModel.find()
-    .where("bestSeller").equals(true)
-    .then(products=>{
-
-
-            res.json({
-                message : "A list of all the products that are best sellers",
-                data : products
-               
-            })
-    })
-    .catch(err=>{
-        res.status(500).json({
-            message :err
-        })
-    })
-};
 
 
 
@@ -91,6 +70,7 @@ exports.getAProduct =(req,res)=>{
                     message : `There is no product in our databse with the id ${req.params.id}`
                 })
             }
+            
 
 
     })
@@ -142,42 +122,28 @@ exports.deleteAProduct = (req,res)=>{
     
     }
 
-    exports.getAllCategories = (req, res) => {
-        productModel.find()
-            .then((product) => {
-                if (product.length === 0) {
-                    res.status(404).json({
-                        message : `There are no product categories`
-                    });
-                }
-                else {
-                    var categoryNames = [];
-    
-                    for (i = 0; i < product.length; i++) {
-                        var repeat = false;
-                        if (categoryNames.length != 0) {
-                            for (j = 0; j < categoryNames.length; j++) {
-                                if (product[i].prodCategory == categoryNames[j]) {
-                                    repeat = true;
-                                }
-                            }
-                            if (repeat == false) {
-                                categoryNames.push(product[i].prodCategory);
-                            }
-                        }
-                        else {
-                            categoryNames.push(product[i].prodCategory);
-                        }
-                    }
-    
-                    res.json({
-                        message : `Showing all product categories`,
-                        data : categoryNames
-                    })
-                }
-            }).catch((err) => {
-                res.status(500).json({
-                    message : `Error ${err}`
-                })
+exports.getAllCategories = (req, res) => {
+    productModel.find()
+    .then(products => {
+        if (!products) {
+            res.status(404).json({
+                message : `No product categories`
+            });
+        }
+        else {
+            let allCategories = [];
+            for (i = 0; i < products.length; i++) {
+                allCategories.push(products[i].category)
+            }
+            let uniqueCategories = [...new Set(allCategories)];
+            res.json({
+                message : `All product categories`,
+                data : uniqueCategories
             })
-    };
+        }
+    }).catch(err => {
+        res.status(500).json({
+            message : err
+        })
+    })
+};
