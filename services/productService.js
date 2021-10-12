@@ -141,3 +141,43 @@ exports.deleteAProduct = (req,res)=>{
     })
     
     }
+
+    exports.getAllCategories = (req, res) => {
+        productModel.find()
+            .then((product) => {
+                if (product.length === 0) {
+                    res.status(404).json({
+                        message : `There are no product categories`
+                    });
+                }
+                else {
+                    var categoryNames = [];
+    
+                    for (i = 0; i < product.length; i++) {
+                        var repeat = false;
+                        if (categoryNames.length != 0) {
+                            for (j = 0; j < categoryNames.length; j++) {
+                                if (product[i].prodCategory == categoryNames[j]) {
+                                    repeat = true;
+                                }
+                            }
+                            if (repeat == false) {
+                                categoryNames.push(product[i].prodCategory);
+                            }
+                        }
+                        else {
+                            categoryNames.push(product[i].prodCategory);
+                        }
+                    }
+    
+                    res.json({
+                        message : `Showing all product categories`,
+                        data : categoryNames
+                    })
+                }
+            }).catch((err) => {
+                res.status(500).json({
+                    message : `Error ${err}`
+                })
+            })
+    };

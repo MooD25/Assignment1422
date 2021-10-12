@@ -1,0 +1,1 @@
+This is my first assignmnet abd my first restfull API. It is in the MVC format but does not have a view yet because we are going to create that in later assignments. The service.js handles the business logic, the countrollers handle the routes and the server.js is our entry point that sets up express. 
