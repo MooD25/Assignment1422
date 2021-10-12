@@ -24,26 +24,92 @@ exports.createAProduct =(req,res)=>{
 
 };
 
-exports.getProducts =(req,res)=>{
-
-
-    productModel.find()
-    .then(products=>{
-
-
-            res.json({
-                message : "A list of all the products",
-                data : products
-               
-            })
-    })
-    .catch(err=>{
-        res.status(500).json({
-            message :err
+exports.getProducts = (req, res) => {
+    if (req.query.id) {
+        productModel.findOne()
+        .where("_id").equals(req.query.id)
+        .then(product=> {
+            if (!product) {
+                res.status(404).json({
+                    message : `Product with ID: ${req.query.id} not found`
+                });
+            }
+            else {
+                res.json({
+                    message : `Product info for: ${req.query.id}`,
+                    data : product
+                })
+            }
         })
-    })
+        .catch((err) => {
+            res.status(500).json({
+                message : err
+            })
+        })
+    }
+    else if (req.query.category) {
+        productModel.find()
+        .where("prodCategory").equals(req.query.category)
+        .then(product => {
+            if (!product.length) {
+                res.status(404).json({
+                    message : `No category: ${req.query.category}`
+                });
+            }
+            else {
+                res.json({
+                    message : `Product Category: ${req.query.category}`,
+                    data : product
+                })
+            }
+        }).catch((err) => {
+            res.status(500).json({
+                message : err
+            })
+        })
+    }
+    else if (req.query.bestSeller) {
+        productModel.find()
+        .where("bestSeller").equals(req.query.bestSeller==="yes" ? true : false)
+        .then(product => {
+            if (!product.length) {
+                res.status(404).json({
+                    message : `There is no best sellers`
+                });
+            }
+            else {
+                res.json({
+                    message : `Here are the best sellers`,
+                    data : product
+                })
+            }
+        }).catch((err) => {
+            res.status(500).json({
+                message : err
+            })
+        })
+    }
+    else {
+        productModel.find()
+        .then(product => {
+            if (!product) {
+                res.status(404).json({
+                    message : `No products available`
+                });
+            }
+            else {
+                res.json({
+                    message : `All products`,
+                    data : product
+                })
+            }
+        }).catch((err) => {
+            res.status(500).json({
+                message : err
+            })
+        })
+    }
 };
-
 
 
 
@@ -67,7 +133,7 @@ exports.getAProduct =(req,res)=>{
             }
             else{
                 res.status(404).json({
-                    message : `There is no product in our databse with the id ${req.params.id}`
+                    message : `There is no product in our database with the id ${req.params.id}`
                 })
             }
             
@@ -127,7 +193,7 @@ exports.getAllCategories = (req, res) => {
     .then(products => {
         if (!products) {
             res.status(404).json({
-                message : `No product categories`
+                message : `There are no product categories`
             });
         }
         else {
@@ -135,10 +201,10 @@ exports.getAllCategories = (req, res) => {
             for (i = 0; i < products.length; i++) {
                 allCategories.push(products[i].category)
             }
-            let uniqueCategories = [...new Set(allCategories)];
+            let distinctCategories = [...new Set(allCategories)];
             res.json({
-                message : `All product categories`,
-                data : uniqueCategories
+                message : `Here are all of the product categories`,
+                data : distinctCategories
             })
         }
     }).catch(err => {
