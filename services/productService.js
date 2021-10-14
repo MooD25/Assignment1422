@@ -49,7 +49,7 @@ exports.getProducts = (req, res) => {
     }
     else if (req.query.category) {
         productModel.find()
-        .where("prodCategory").equals(req.query.category)
+        .where("category").equals(req.query.category)
         .then(product => {
             if (!product.length) {
                 res.status(404).json({
@@ -189,22 +189,23 @@ exports.deleteAProduct = (req,res)=>{
     }
 
 exports.getAllCategories = (req, res) => {
-    productModel.find()
+    productModel.find() //finding all the products
     .then(products => {
-        if (!products) {
+        if (!products) { //if there is no products then send a 404 error
             res.status(404).json({
                 message : `There are no product categories`
             });
         }
         else {
-            let allCategories = [];
-            for (i = 0; i < products.length; i++) {
-                allCategories.push(products[i].category)
+            let allProductCategories = []; //declaring an array to store all of the categories
+             let productsCount = products.length;
+            for (i = 0; i < productsCount; i++) {
+                allProductCategories.push(products[i].category) //pushing categories into array
             }
-            let distinctCategories = [...new Set(allCategories)];
+            let distinctCategories = [...new Set(allProductCategories)]; //use set to generate unique categories (elminate duplicates) only left with distinct categories
             res.json({
                 message : `Here are all of the product categories`,
-                data : distinctCategories
+                data : distinctCategories //deplay distict categories
             })
         }
     }).catch(err => {
