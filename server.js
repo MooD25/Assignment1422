@@ -19,16 +19,15 @@ if (process.env.NODE_ENV != "production") {
 
 const app = express();
 
-const corsOptionsDelegate = function (req, callback) 
-{
-  const allowlist = [`http://localhost:300`, 'http://127.0.0.1:3000','https://boring-meitner-1b8850.netlify.app']
-  let corsOptions;
-  if (allowlist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false } // disable CORS for this request
-  }
-  callback(null, corsOptions) // callback expects two parameters: error and options
+const corsOptionsDelegate = function (req, callback) {
+    const allowlist = [`http://localhost:3000`, 'http://127.0.0.1:3001', 'https://boring-meitner-1b8850.netlify.app']
+    let corsOptions;
+    if (allowlist.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = { origin: false } // disable CORS for this request
+    }
+    callback(null, corsOptions) // callback expects two parameters: error and options
 }
 
 app.use(cors(corsOptionsDelegate))
@@ -42,14 +41,14 @@ app.use("/products", productController);
 
 
 
-app.listen(process.env.PORT || PORT,()=>{
+app.listen(process.env.PORT || PORT, () => {
     console.log(`Restful API is up and running  on port ${process.env.PORT}`);
 
     mongoose.connect(process.env.MONGODB_QUERY_STRING)
-    .then(()=>{
-        console.log(`Connected to MongoDB`)
-    })
-    .catch(err=>{
-        console.log(`Error ${err}`);
-    })
+        .then(() => {
+            console.log(`Connected to MongoDB`)
+        })
+        .catch(err => {
+            console.log(`Error ${err}`);
+        })
 })

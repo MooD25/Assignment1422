@@ -1,12 +1,12 @@
 import React from 'react'
 import { useEffect, useState } from "react"
 
-const BestSeller = () => {
+const ProdListing = () => {
     const [products, setProducts] = useState([{}]);
 
     useEffect(() => {
 
-        fetch("http://localhost:300/products?bestSeller=yes")
+        fetch("http://localhost:300/products")
             .then(response => response.json())
             .then(json => {
 
@@ -44,4 +44,4 @@ const BestSeller = () => {
         </>)
 }
 
-export default BestSeller
+export default ProdListing

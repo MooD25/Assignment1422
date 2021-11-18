@@ -1,39 +1,51 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useState,useEffect} from 'react';
-import Header from "./Header";
-import Footer from "./Footer";
-import Hero from "./Hero";
+
+import Home from "../pages/Home.js";
+import ProdListing from "../pages/ProdListing.js";
+import ProdCatPage from "../pages/ProdCatPage.js";
+import RegPage from "../pages/RegPage.js";
+import LogPage from "../pages/LogPage.js";
+import ProdDetailPage from "../pages/ProdDetailPage.js";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 //import BestSeller from "./BestSeller";
 //import ProdCat from "./ProdCat";
 
-const App =()=>{
-  const [products, setProducts] = useState([{}])
+const App = () => {
 
-  useEffect(()=>{
-
-    fetch("https://rest-api-shopmart.herokuapp.com/products?bestSeller=yes")
-    .then(response=> response.json())
-    .then(json=>{
-  
-      console.log(json.data);
-      setProducts(json.data)
-  
-    })
-    .catch(err=>{
-      console.log(`Error ${err}`);
-    })
-
-  })
 
 
   return (
     <>
-    <Header/>
-    <main>
-      <Hero/>
-    </main>
-    <Footer/>
+
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+
+          <Route exact path="/prodlisting">
+            <ProdListing />
+          </Route>
+
+          <Route exact path="/cat/:category">
+            <ProdCatPage />
+          </Route>
+
+          <Route exact path="/registration">
+            <RegPage />
+          </Route>
+
+          <Route exact path="/login">
+            <LogPage />
+          </Route>
+
+          <Route exact path="/productDetail/:id">
+            <ProdDetailPage />
+          </Route>
+        </Switch>
+      </Router>
     </>
   )
 }
